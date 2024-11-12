@@ -1,0 +1,86 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+    <body class="p-4">
+        <div class="max-w-md mx-auto bg-gray-200 p-8 rounded-md shadow-lg">
+            <h1 class="text-center text-2xl text-gray-800 font-bold">Number to Words</h1>
+            <input class="w-full p-2 rounded-md my-3 border focus:outline-none focus:border-gray-400" type="number" id="numberInput" placeholder="Enter a number (0-999,999,999)">
+            <button class="w-full p-2 rounded-md bg-green-500 text-white hover:opacity-80 transition-all" onclick="convertNumber()">Convert</button>
+            <div class="p-2 rounded-md bg-white text-center mt-3" id="result">Enter a number between 0 and 999,999,999</div>
+            <p class="text-center text-sm mt-3 text-gray-400">Supports numbers up to 999,999,999</p>
+        </div>
+    
+        <script>
+            function convertNumber() {
+                var num = document.getElementById('numberInput').value;
+                var result = numberToWords(parseInt(num));
+                document.getElementById('result').innerHTML = result;
+            }
+    
+            function numberToWords(num) {
+                if (isNaN(num) || num < 0 || num > 999999999) {
+                    return "Please enter a valid number between 0 and 999,999,999";
+                }
+    
+                if (num === 0) return "zero";
+    
+                const ones = ["", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"];
+                const tens = ["", "", "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety"];
+                const teens = ["ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen"];
+    
+                function convertGroup(n) {
+                    let words = "";
+    
+                    // Hundreds
+                    if (n >= 100) {
+                        words += ones[Math.floor(n / 100)] + " hundred ";
+                        n %= 100;
+                    }
+    
+                    // Tens and Ones
+                    if (n >= 10) {
+                        if (n < 20) {
+                            words += teens[n - 10];
+                        } else {
+                            words += tens[Math.floor(n / 10)];
+                            if (n % 10 > 0) {
+                                words += " " + ones[n % 10];
+                            }
+                        }
+                    } else if (n > 0) {
+                        words += ones[n];
+                    }
+    
+                    return words.trim();
+                }
+    
+                let words = "";
+    
+                // Millions
+                if (num >= 1000000) {
+                    words += convertGroup(Math.floor(num / 1000000)) + " million ";
+                    num %= 1000000;
+                }
+    
+                // Thousands
+                if (num >= 1000) {
+                    words += convertGroup(Math.floor(num / 1000)) + " thousand ";
+                    num %= 1000;
+                }
+    
+                // Remaining hundreds, tens, and ones
+                if (num > 0) {
+                    words += convertGroup(num);
+                }
+    
+                return words.trim();
+            }
+        </script>
+    </body>
+</body>
+</html>
