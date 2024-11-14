@@ -60,6 +60,18 @@
                 }
     
                 let words = "";
+
+                // Crores
+                if (num >= 10000000) {
+                    words += convertGroup(Math.floor(num / 10000000)) + " crore ";
+                    num %= 10000000;
+                }
+
+                // Lakhs
+                if (num >= 100000) {
+                    words += convertGroup(Math.floor(num / 100000)) + " lakh ";
+                    num %= 100000;
+                }
     
                 // Millions
                 if (num >= 1000000) {
